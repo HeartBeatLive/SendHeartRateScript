@@ -21,16 +21,32 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
 	exit
 fi
 
+ValidateNumberParameter() {
+	re='^[0-9]+$'
+	if ! [[ $2 =~ $re ]] ; then
+	   echo "error: Parameter '$1' must be a number."
+	   exit
+	fi
+}
+
 while getopts :l:h:t:e:j: flag ; do
 	case "${flag}" in
-        l) minHeartRate=${OPTARG};;
-        h) maxHeartRate=${OPTARG};;
-		t) sendTimeoutSeconds=${OPTARG};;
-		e) serverEndpoint=${OPTARG};;
-		j) jwtToken=${OPTARG};;
+        l)
+		   	ValidateNumberParameter '-l' "${OPTARG}"
+		   	minHeartRate=${OPTARG};;
+        h) 
+		   	ValidateNumberParameter '-h' "${OPTARG}"
+		   	maxHeartRate=${OPTARG};;
+		t)
+		   	ValidateNumberParameter '-t' "${OPTARG}"
+			sendTimeoutSeconds=${OPTARG};;
+		e)
+			serverEndpoint=${OPTARG};;
+		j)
+			jwtToken=${OPTARG};;
 		\?)
-           echo "Error: Invalid option '${OPTARG}'"
-           exit;;
+           	echo "Error: Invalid option '${OPTARG}'"
+           	exit;;
     esac
 done
 
